@@ -27,8 +27,12 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage
-RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage \
+    && chown -R www-data:www-data /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache \
+    && mkdir -p /var/www/html/storage/logs \
+    && chmod -R 777 /var/www/html/storage/logs
 
 # Copy Apache config
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
